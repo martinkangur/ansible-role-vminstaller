@@ -1,0 +1,5 @@
+---
+distroname: winsrv2008r2
+distrotype: win2k8
+templatetype: winsrv2008
+gextrargs: ''

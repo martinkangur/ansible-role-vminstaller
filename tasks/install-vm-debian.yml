@@ -1,0 +1,21 @@
+- name: create and copy the post-preseed file of the machine
+  action: template src=debian/post-preseed.sh  dest="{{ webpath }}{{ inventory_hostname }}.sh" owner=nginx group=nginx mode=666 setype=httpd_sys_content_t
+  delegate_to: "{{ webserver }}"
+
+- name: create and copy the preseed file of the machine
+  action: template src=debian/minimal-preseed.cfg  dest="{{ virtualfilespath }}{{ injectfile }}"
+  delegate_to: "{{ hyper }}"
+
+- name: create and copy the vm install script
+  action: template src=common/install-vm.sh  dest="{{ virtualfilespath }}{{ inventory_hostname }}-create-vm.sh" owner=root group=root mode=770
+  delegate_to: "{{ hyper }}"
+
+- name: execute the vm install script
+  action: command /bin/bash {{ virtualfilespath }}{{ inventory_hostname }}-create-vm.sh
+  delegate_to: "{{ hyper }}"
+  #ignore_errors: yes
+  register: createdvm
+
+- name: wait for the vm to install
+  local_action: pause minutes={{ vmwaittime }}
+  #only_if: "{{ createdvm.stdout_lines }} == ''"

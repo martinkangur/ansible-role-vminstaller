@@ -1,0 +1,9 @@
+---
+distroname: rhel7
+distrotype: rhel7
+templatetype: el7
+minram: 512
+location: "http://ftp.redhat.com/redhat/rhel/beta/7/x86_64/os/"
+repos:
+    - { name: "RHEL7-Base" , uri: "http://ftp.redhat.com/redhat/rhel/beta/7/x86_64/os/" , cost: 100 }
+textrargs: 'text ks=file:/{{ inventory_hostname }}.cfg console=ttyS0,115200 headless noshell nofirewire'

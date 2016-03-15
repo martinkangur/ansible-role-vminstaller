@@ -1,0 +1,17 @@
+- name: create and copy the kickstart file of the machine
+  action: template src="~/.ansible/playbooks/templates/el6/kickstart.cfg"  dest="{{virtualfilespath }}{{ inventory_hostname }}.cfg"
+  delegate_to: "{{ hyper }}"
+
+- name: create and copy the install script
+  action: template src="~/.ansible/playbooks/templates/common/install-vm.sh"  dest="{{ virtualfilespath }}{{ inventory_hostname }}-create-vm.sh" owner=root group=root mode=770
+  delegate_to: "{{ hyper }}"
+
+- name: execute install script
+  action: command /bin/bash {{ virtualfilespath }}{{ inventory_hostname }}-create-vm.sh
+  delegate_to: "{{ hyper }}"
+  #ignore_errors: yes
+  register: createdvm
+
+- name: wait for vm to install
+  local_action: pause minutes={{ vmwaittime }}
+  #when: createdvm.stdout_lines == ''

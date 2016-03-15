@@ -1,0 +1,26 @@
+- name: create and copy the install script
+  action: template src="common/install-vm.sh"  dest="{{ virtualfilespath }}{{ inventory_hostname }}-create-vm.sh" owner=root group=root mode=770
+  delegate_to: "{{ hyper }}"
+
+- name: copy unattended autoinstall xml file
+  action: template src="{{ distroname }}/autounattend.xml" dest="{{ virtualfilespath }}{{ inventory_hostname }}-autounattend.xml" owner=root group=root mode=660
+  delegate_to: "{{ hyper }}"
+
+- name: copy winrm activation script
+  action: copy src="windows/ConfigureRemotingForAnsible.ps1" dest="{{ virtualfilespath }}{{ inventory_hostname }}-ConfigureRemotingForAnsible.ps1" owner=root group=root mode=660
+  delegate_to: "{{ hyper }}"
+
+- name: slice unattended autoinstall file
+  action: template src="{{ distroname }}/create-autounattend-disk.sh" dest="{{ virtualfilespath }}{{ inventory_hostname }}-create-autounattend-disk.sh" owner=root group=root mode=0770
+  delegate_to: "{{ hyper }}"
+
+- name: slice unattended autoinstall file
+  action: command /bin/bash {{ virtualfilespath }}{{ inventory_hostname }}-create-autounattend-disk.sh
+  delegate_to: "{{ hyper }}"
+
+- name: execute install script
+  action: command /bin/bash {{ virtualfilespath }}{{ inventory_hostname }}-create-vm.sh
+  delegate_to: "{{ hyper }}"
+
+- name: wait for vm to install
+  local_action: pause minutes={{ vmwaittime }}

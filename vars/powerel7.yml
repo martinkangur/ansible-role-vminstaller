@@ -1,0 +1,11 @@
+---
+distroname: powerel7
+distrotype: rhel7
+templatetype: pel7
+minram: 2048
+location: http://10.59.39.200/yum/pel/7/{{ machinearch }}/os/
+repos:
+  - name: "PowerEL-base"
+    uri: "http://10.59.39.200/yum/pel/7/{{ machinearch }}/base/packages/"
+    cost: 100
+textrargs: 'text repo={{ location }} ks=file:/{{ inventory_hostname }}.cfg console=hvc0,115200 headless noshell nofirewire rd_NO_PLYMOUTH plymouth.enable=0 biosdevname=0 elevator=noop geoloc=0 nopass kdump_addon=off nopcmia'

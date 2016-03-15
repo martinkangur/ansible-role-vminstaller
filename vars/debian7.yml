@@ -1,0 +1,14 @@
+---
+distroname: debian7
+distrotype: debianwheezy
+debianname: wheezy
+minram: 256
+injectfile: preseed.cfg
+location: http://be.mirror.eurid.eu/debian/dists/wheezy/main/installer-amd64/
+mirrorcountry: be
+mirrorurl: ftp.be.debian.org
+mirrordir: /debian
+textrargs: "auto=true DEBIAN_FRONTEND=text noshell fb=false console=ttyS0,115200 lowmem BOOT_DEBUG=2"
+webserver: mangal
+webpath: /var/www/virtual/vantosh.com/ks/
+weburl: http://ks.vantosh.com/
