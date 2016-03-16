@@ -77,14 +77,14 @@
 - name: start the vm
   action: virt guest={{ inventory_hostname }} command=start
   delegate_to: "{{ hyper }}"
-  #ignore_errors: yes
+  ignore_errors: yes
 
 - name: clean up files
   action: file path={{ item }} state=absent
   delegate_to: "{{ hyper }}"
   with_items:
     - "{{ virtualfilespath }}{{ inventory_hostname }}-create-vm.sh"
-    - "{{ virtualfilespath }}{{ injectfile }}"
+    #- "{{ virtualfilespath }}{{ injectfile }}"
     - "{{ virtualfilespath }}{{ inventory_hostname }}.cfg"
     - "{{ virtualfilespath }}{{ inventory_hostname }}-create-disks.sh"
     - "{{ virtualfilespath }}{{ inventory_hostname }}-minram.sh"
