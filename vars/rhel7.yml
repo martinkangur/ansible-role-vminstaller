@@ -3,7 +3,7 @@ distroname: rhel7
 distrotype: rhel7
 templatetype: el7
 minram: 512
-location: "http://ftp.redhat.com/redhat/rhel/beta/7/x86_64/os/"
+location: "http://10.59.39.253/rhel/7/ppc64le/"
 repos:
-    - { name: "RHEL7-Base" , uri: "http://ftp.redhat.com/redhat/rhel/beta/7/x86_64/os/" , cost: 100 }
-textrargs: 'text ks=file:/{{ inventory_hostname }}.cfg console=ttyS0,115200 headless noshell nofirewire'
+    - { name: "RHEL7-ppc64le" , uri: "http://10.59.39.253/rhel/7/ppc64le/" , cost: 100 }
+textrargs: 'text ks=file:/{{ inventory_hostname }}.cfg console=hvc0,115200 headless noshell nofirewire'
