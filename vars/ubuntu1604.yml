@@ -1,0 +1,14 @@
+---
+distroname: ubuntu1604
+distrotype: ubuntu15.04
+distrocodename: xenial
+templatetype: ubuntu
+minram: 512
+injectfile: preseed.cfg
+location: http://be.ports.ubuntu.com/ubuntu-ports/dists/{{ distrocodename }}/main/installer-{{ machinearch }}/
+#location: http://be.archive.ubuntu.com/ubuntu/dists/{{ distrocodename }}/main/installer-{{ machinearch }}/
+mirrorcountry: be
+mirrorurl: be.ports.ubuntu.com
+#mirrorurl: archive.ubuntu.com
+mirrordir: /ubuntu
+textrargs: "auto=true DEBIAN_FRONTEND=text noshell fb=false console={{ serialconsole }},115200 lowmem netcfg/disable_autoconfig=true biosdevname=0 net.ifnames=0 BOOT_DEBUG=2"
