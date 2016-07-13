@@ -1,5 +1,5 @@
 ---
 distroname: winsrv2012r2
-distrotype: win2k8
+distrotype: win2k12r2
 templatetype: winsrv2012
 gextrargs: ''
