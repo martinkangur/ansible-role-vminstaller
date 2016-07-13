@@ -1,12 +1,12 @@
-- name: set machine arch variables
+- name: set machine arch variables ({{ machinearch }})
   include_vars: "{{ machinearch }}/console.yml"
   when: virtconsole is not defined
 
-- name: set distribution variables
+- name: set distribution variables ({{ distro }})
   include_vars: "{{ distro }}.yml"
 
 - name: create the qemu disk images
-  action: qemu-img dest={{ item.path }} size={{ item.size }} format="qcow2" options="preallocation=falloc"
+  action: qemu_img dest={{ item.path }} size={{ item.size }} format="qcow2" options="preallocation=falloc"
   with_items: "{{ disks }}"
   delegate_to: "{{ hyper }}"
 
@@ -32,6 +32,10 @@
   include: install-vm-debian.yml
   when: templatetype == 'debian'
 
+### UBUNTU
+- name: start distribution installation - UBUNTU
+  include: install-vm-ubuntu.yml
+  when: templatetype == 'ubuntu'
 
 #- name: start distribution installation - OPENBSD
 #  include: install-vm-openbsd.yml
@@ -53,10 +57,6 @@
 #  include: install-vm-fedora.yml
 #  when: templatetype == 'fedora'
 
-#- name: start distribution installation - UBUNTU
-#  include: install-vm-ubuntu.yml
-#  when: templatetype == 'ubuntu'
-
 #- name: start distribution installation - WIN7
 #  include: install-vm-win7.yml
 #  when: templatetype == 'win7'
@@ -72,7 +72,6 @@
 - name: execute minimum ram hack where required
   include: minimum-ram-hack.yml
   when: minram is defined
-
 
 - name: start the vm
   action: virt guest={{ inventory_hostname }} command=start
