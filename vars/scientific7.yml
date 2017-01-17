@@ -1,0 +1,11 @@
+---
+distroname: scientific7
+distrotype: rhel7
+templatetype: el7
+minram: 1024
+location: "http://be.mirror.eurid.eu/scientific/7x/x86_64/os/"
+repos:
+  - { name: "SL7-base", uri: "http://be.mirror.eurid.eu/scientific/7x/x86_64/os/", cost: 100 }
+  - { name: "SL7-security", uri: "http://be.mirror.eurid.eu/scientific/7x/x86_64/updates/security", cost: 200 }
+  - { name: "SL7-fastbugs", uri: "http://be.mirror.eurid.eu/scientific/7x/x86_64/updates/fastbugs", cost: 300 }
+textrargs: 'text ks=file:/{{ inventory_hostname }}.cfg console=ttyS0,115200 headless noshell nofirewire nopcmcia nofb'
