@@ -1,0 +1,12 @@
+---
+distroname: openbsd60
+distrotype: openbsd5.8
+templatetype: openbsd
+minram: 32
+isolocation: http://ftp.halifax.rwth-aachen.de/openbsd/6.0/amd64/
+isofile: install60.iso
+installlocation: ftp.halifax.rwth-aachen.de
+installpath: /openbsd/6.0/{{ machinearch }}/
+version: 60
+packagelocation: http://ftp.halifax.rwth-aachen.de/openbsd/6.0/packages/{{ machinearch }}/
+textrargs: ''

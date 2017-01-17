@@ -1,0 +1,56 @@
+- name: get webserver variables
+  include_vars: webserver.yml
+
+#- name: create and copy the autoinstall file of the machine
+#  action: template src=openbsd/autoinstall.conf dest="{{ webpath }}{{ inventory_hostname }}.conf" mode=444
+#  delegate_to: "{{ webserver }}"
+
+- name: copy templated install script
+  action: template src=openbsd/install-vm.sh  dest="{{ virtualfilespath }}{{ inventory_hostname }}-create-vm.sh" owner=root group=root mode=770
+  delegate_to: "{{ hyper }}"
+
+- name: copy autoinstall template
+  action: template src=openbsd/autoinstall.conf dest="{{ virtualfilespath }}/autoinstall.conf" owner=root group=root mode=660
+  delegate_to: "{{ hyper }}"
+
+- name: install script dependencies
+  action: yum pkg={{ item }} state=latest
+  delegate_to: "{{ hyper }}"
+  with_items:
+    - expect
+    - dvd+rw-tools
+
+#- name: execute install script
+#  action: shell {{ virtualfilespath }}{{ inventory_hostname }}-create-vm.sh executable=/bin/bash
+#  delegate_to: "{{ hyper }}"
+#  #ignore_errors: yes
+#  #register: createdvm
+
+- name: wait for installation to complete
+  local_action: pause minutes={{ vmwaittime }}
+  #only_if: "{{ createdvm.stdout_lines }} == ''"
+
+- action: template src="templates/common/minram.sh"  dest="{{ virtualfilespath }}{{ inventory_hostname }}-minram.sh" owner=root group=root mode=770
+  delegate_to: "{{ hyper }}"
+  when: ramsize < minram
+
+- action: raw {{ virtualfilespath }}{{ inventory_hostname }}-minram.sh
+  delegate_to: "{{ hyper }}"
+  when: ramsize < minram
+
+- action: virt guest={{ inventory_hostname }} command=start
+  delegate_to: "{{ hyper }}"
+  ignore_errors: yes
+
+#- name: remove all installation files
+#  action: file path={{ item }} state=absent
+#  delegate_to: "{{ hyper }}"
+#  with_items:
+#    - "{{ virtualfilespath }}{{ inventory_hostname }}-create-vm.sh"
+#    - "{{ virtualfilespath }}{{ isofile }}"
+#    - "{{ virtualfilespath }}boot.conf"
+#    - "{{ virtualfilespath }}random.seed"
+#    - "{{ virtualfilespath }}{{ inventory_hostname }}-minram.sh"
+
+#- local_action: wait_for host={{ ansible_ssh_host }} port={{ ansible_ssh_port }} delay=5 state=started timeout=300
+#  sudo: no

@@ -1,0 +1,12 @@
+---
+distroname: openbsd59
+distrotype: openbsd5.6
+templatetype: openbsd
+minram: 32
+isolocation: http://ftp.halifax.rwth-aachen.de/openbsd/5.9/amd64/
+isofile: install59.iso
+installlocation: ftp.halifax.rwth-aachen.de
+installpath: /openbsd/5.9/amd64/
+version: 59
+packagelocation: http://ftp.halifax.rwth-aachen.de/openbsd/5.9/packages/amd64/
+textrargs: ''
