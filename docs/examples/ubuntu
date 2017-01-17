@@ -1,0 +1,38 @@
+---
+ansible_host:
+ansible_port:
+ansible_user:
+ansible_private_key_file:
+hyper: (required)
+distro: (required)
+machinearch: (required)
+machinetype: (optional) [ the machinetype used by qemu ]
+virtualcputype: (optional) [ whatever qemu can use ]
+rootpwd: (required) [ here goes the encrypted root password as in the preseed file ]
+vmwaittime: (required)
+virtualcpus: (required)
+virtualsockets: (optional) [required if virtualcores and virtualthreads is used]
+virtualcores: (optional) [required if virtualcores and virtualthreads is used]
+virtualthreads: (optional) [required if virtualcores and virtualthreads is used]
+ramsize: (required)
+sshdrsakeylength: (required)
+sshdecdsakeylength: (required)
+language: (required)
+locale: (required)
+keyboard: (required)
+timezone: (required
+nics: (required) [ each line is a nic in the guest with the link on the hypervisor )
+  - { type: (required) , name: (required) , model: (required) , device: (required) , onboot: (required) , bootproto: (required) , ip: (required) , netmask: (required) , gateway: (required) , route: (required) , nameserver: (required) , network (optional) , broadcast: (optional) , mtu: (optional) }
+preseednic: (optional) [ only useful if you have multiple nics ]
+hostname: (required)
+virtualfilespath: (required) [ where the vm-installer scripts are copied to on the hypervisor ]
+disks: (optional) [ each qemu image file that is created with qemu-img module ]
+  - { path: (required)  , size: (required) }
+iscsi: (optional) [ creates iscsi initiator lun's for use in the installation process ]
+  - { iqnname: (required) , server: (required) , username: (required) , password: (required) }
+iscsinic: (required)
+partitions: (required)
+  - [ partitions as in the preseed file, each line is a partition]
+bootpartition: (required) [ the device name of the MBR device ]
+users: (optional)
+  - { name: (required) , id: (required) , sshpubkey: (required) )
