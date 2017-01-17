@@ -9,6 +9,7 @@
   action: qemu_img dest={{ item.path }} size={{ item.size }} format="qcow2" options="preallocation=falloc"
   with_items: "{{ disks }}"
   delegate_to: "{{ hyper }}"
+  when: disks is defined
 
 ###
 
@@ -37,10 +38,12 @@
   include: install-vm-ubuntu.yml
   when: templatetype == 'ubuntu'
 
-#- name: start distribution installation - OPENBSD
-#  include: install-vm-openbsd.yml
-#  when: templatetype == 'openbsd'
+### OPENBSD
+- name: start distribution installation - OPENBSD
+  include: install-vm-openbsd.yml
+  when: templatetype == 'openbsd'
 
+### FREEBSD
 #- name: start distribution installation - FREEBSD
 #  include: install-vm-freebsd.yml
 #  when: templatetype == 'freebsd'
