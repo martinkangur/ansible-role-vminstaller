@@ -2,23 +2,40 @@
   include_vars: webserver.yml
 
 - name: create post preseed installation file from templated file
-  action: template src="ubuntu/post-preseed.sh"  dest={{ webpath }}{{ inventory_hostname }}.sh owner={{ webuser }} group={{ webuser }} mode=666 setype=httpd_sys_content_t
+  template: src: "ubuntu/post-preseed.sh"
+    dest: "{{ webpath }}{{ inventory_hostname }}.sh"
+    owner: "{{ webuser }}"
+    group: "{{ webuser }}"
+    mode: 0666
+    setype: httpd_sys_content_t
   delegate_to: "{{ webserver }}"
 
 - name: create preseed installation file from templated file
-  action: template src="ubuntu/minimal-preseed.cfg"  dest="{{ virtualfilespath }}{{ injectfile }}" owner=root group=root  mode=660
+  template:
+      src: "ubuntu/minimal-preseed.cfg"
+      dest: "{{ virtualfilespath }}{{ injectfile }}"
+      owner: root
+      group: root
+      mode: 0660
   delegate_to: "{{ hyper }}"
 
 #- name: create kickstart installation file from templated file
-#  action: template src=ubuntu/kickstart.cfg dest="{{ virtualfilespath }}{{ inventory_hostname }}.cfg"
+#  template:
+#    src: ubuntu/kickstart.cfg
+#    dest: "{{ virtualfilespath }}{{ inventory_hostname }}.cfg"
 #  delegate_to: "{{ hyper }}"
 
 - name: copy templated install file
-  action: template src="common/install-vm.sh"  dest="{{ virtualfilespath }}{{ inventory_hostname }}-create-vm.sh" owner=root group=root mode=770
+  template:
+    src: "common/install-vm.sh"
+    dest: "{{ virtualfilespath }}{{ inventory_hostname }}-create-vm.sh"
+    owner: root
+    group: root
+    mode: 0770
   delegate_to: "{{ hyper }}"
 
 - name: execute installation script
-  action: command /bin/bash {{ virtualfilespath }}{{ inventory_hostname }}-create-vm.sh
+  command: "/bin/bash {{ virtualfilespath }}{{ inventory_hostname }}-create-vm.sh"
   delegate_to: "{{ hyper }}"
   register: createdvm
 

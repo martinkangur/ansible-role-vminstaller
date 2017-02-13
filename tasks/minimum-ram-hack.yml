@@ -1,10 +1,15 @@
 - name: copy minimal ram script
-  action: template src=templates/common/minram.sh  dest="{{ virtualfilespath }}{{ inventory_hostname }}-minram.sh" owner=root group=root mode=770
+  template:
+    src: templates/common/minram.sh
+    dest: "{{ virtualfilespath }}{{ inventory_hostname }}-minram.sh"
+    owner: root
+    group: root
+    mode: 0770
   delegate_to: "{{ hyper }}"
   when: ramsize < minram
 
 - name: execute minimal ram script
-  action: command /bin/bash {{ virtualfilespath }}{{ inventory_hostname }}-minram.sh
+  command: "/bin/bash {{ virtualfilespath }}{{ inventory_hostname }}-minram.sh"
   delegate_to: "{{ hyper }}"
   when: ramsize < minram
 

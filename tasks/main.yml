@@ -6,7 +6,11 @@
   include_vars: "{{ distro }}.yml"
 
 - name: create the qemu disk images
-  action: qemu_img dest={{ item.path }} size={{ item.size }} format="qcow2" options="preallocation=falloc"
+  qemu_img:
+    dest: "{{ item.path }}"
+    size: "{{ item.size }}"
+    format: "qcow2"
+    options: "preallocation=falloc"
   with_items: "{{ disks }}"
   delegate_to: "{{ hyper }}"
   when: disks is defined
@@ -77,12 +81,16 @@
   when: minram is defined
 
 - name: start the vm
-  action: virt guest={{ inventory_hostname }} command=start
+  virt:
+    guest: "{{ inventory_hostname }}"
+    command: start
   delegate_to: "{{ hyper }}"
   ignore_errors: yes
 
 - name: clean up files
-  action: file path={{ item }} state=absent
+  file:
+    path: "{{ item }}"
+    state: absent
   delegate_to: "{{ hyper }}"
   with_items:
     - "{{ virtualfilespath }}{{ inventory_hostname }}-create-vm.sh"
@@ -100,4 +108,4 @@
   become: no
 
 - name: gather facts
-  action: setup
+  setup:
