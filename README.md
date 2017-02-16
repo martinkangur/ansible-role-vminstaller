@@ -76,7 +76,14 @@ The list of the variables that are used :
     - The python version to install so we can use ansible modules
 * __users__ (optional) { name: (required) , id: (required) , sshpubkey: (required) )
     - The users to be created on the virtual machine, this is actually used by another role, but has been added here for future usage
-
+* __webserver__ (required) [_UBUNTU_][_DEBIAN_]
+    - The webserver name to be used for post-preseed commands as listed in the inventory
+* __webpath__ (required) [_UBUNTU_][_DEBIAN_]
+    - The path on the webserver where to place the post-preseed file
+* __weburl__ (required) [_UBUNTU_][_DEBIAN_]
+    - The url that the new vm can use to get the post-preseed file from the webserver
+* __webuser__ (required) [_UBUNTU_][_DEBIAN_]
+    - The user on the webserver that has access to the folder and that the webserver deamon can read from
 
 ### Examples ###
 
