@@ -1,0 +1,6 @@
+---
+webserver: automator
+webpath: /data/www/
+#weburl: http://automator.vantosh.com/
+weburl: http://94.226.168.35/
+webuser: ansible
