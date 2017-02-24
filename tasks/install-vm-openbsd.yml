@@ -6,22 +6,36 @@
 #  delegate_to: "{{ webserver }}"
 
 - name: copy templated install script
-  action: template src=openbsd/install-vm.sh  dest="{{ virtualfilespath }}{{ inventory_hostname }}-create-vm.sh" owner=root group=root mode=770
+  template:
+    src: openbsd/install-vm.sh
+    dest: "{{ virtualfilespath }}{{ inventory_hostname }}-create-vm.sh"
+    owner: root
+    group: root
+    mode: 0770
   delegate_to: "{{ hyper }}"
 
 - name: copy autoinstall template
-  action: template src=openbsd/autoinstall.conf dest="{{ virtualfilespath }}/autoinstall.conf" owner=root group=root mode=660
+  template:
+    src: openbsd/autoinstall.conf
+    dest: "{{ virtualfilespath }}/autoinstall.conf"
+    owner: root
+    group: root
+    mode: 0660
   delegate_to: "{{ hyper }}"
 
 - name: install script dependencies
-  action: yum pkg={{ item }} state=latest
+  yum:
+    pkg: "{{ item }}"
+    state: latest
   delegate_to: "{{ hyper }}"
   with_items:
     - expect
     - dvd+rw-tools
 
 #- name: execute install script
-#  action: shell {{ virtualfilespath }}{{ inventory_hostname }}-create-vm.sh executable=/bin/bash
+#  shell: "{{ virtualfilespath }}{{ inventory_hostname }}-create-vm.sh"
+#  args:
+#    executable: /bin/bash
 #  delegate_to: "{{ hyper }}"
 #  #ignore_errors: yes
 #  #register: createdvm
@@ -30,7 +44,12 @@
   local_action: pause minutes={{ vmwaittime }}
   #only_if: "{{ createdvm.stdout_lines }} == ''"
 
-- action: template src="templates/common/minram.sh"  dest="{{ virtualfilespath }}{{ inventory_hostname }}-minram.sh" owner=root group=root mode=770
+- template:
+    src: "templates/common/minram.sh"
+    dest: "{{ virtualfilespath }}{{ inventory_hostname }}-minram.sh"
+    owner: root
+    group: root
+    mode: 0770
   delegate_to: "{{ hyper }}"
   when: ramsize < minram
 
@@ -38,12 +57,16 @@
   delegate_to: "{{ hyper }}"
   when: ramsize < minram
 
-- action: virt guest={{ inventory_hostname }} command=start
+- virt:
+    guest: "{{ inventory_hostname }}"
+    command: start
   delegate_to: "{{ hyper }}"
   ignore_errors: yes
 
 #- name: remove all installation files
-#  action: file path={{ item }} state=absent
+#  file:
+#    path: "{{ item }}"
+#    state: absent
 #  delegate_to: "{{ hyper }}"
 #  with_items:
 #    - "{{ virtualfilespath }}{{ inventory_hostname }}-create-vm.sh"

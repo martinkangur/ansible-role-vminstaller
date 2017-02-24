@@ -1,13 +1,20 @@
 - name: create and copy the kickstart file of the machine
-  action: template src="pel7/kickstart.cfg" dest="{{virtualfilespath }}{{ inventory_hostname }}.cfg"
+  template:
+    src: "pel7/kickstart.cfg"
+    dest: "{{virtualfilespath }}{{ inventory_hostname }}.cfg"
   delegate_to: "{{ hyper }}"
 
 - name: make install script
-  action: template src="common/install-vm.sh" dest="{{ virtualfilespath }}{{ inventory_hostname }}-create-vm.sh" owner=root group=root mode=770
+  template:
+    src: "common/install-vm.sh"
+    dest: "{{ virtualfilespath }}{{ inventory_hostname }}-create-vm.sh"
+    owner: root
+    group: root
+    mode: 0770
   delegate_to: "{{ hyper }}"
 
 - name: execute install script
-  action: raw {{ virtualfilespath }}{{ inventory_hostname }}-create-vm.sh
+  raw: "{{ virtualfilespath }}{{ inventory_hostname }}-create-vm.sh"
   delegate_to: "{{ hyper }}"
   register: createdvm
 
